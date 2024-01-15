@@ -9,8 +9,6 @@
 - controllers/UserController.js
 - routes/UserRouter.js
 - Non-route Functions
-- Create `importJSONdata()` function & snippet
-- - Importance of keeping database backups (seeds)
 
 ***
 
