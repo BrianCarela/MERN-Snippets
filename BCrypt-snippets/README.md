@@ -84,7 +84,7 @@ THIS FILE MAY BE UPDATED IN THE FUTURE TO ALIGN WITH A LOGIN PATH
 
 ```js
 "MERN-Bcrypt-controller": {
-        "prefix": "bcrypt-controller-template",
+        "prefix": "user-controller-template",
         "body": [
             "const User = require('../models/UserModel');",
             "const bcrypt = require('bcrypt');",
