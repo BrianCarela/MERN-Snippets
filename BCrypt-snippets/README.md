@@ -27,6 +27,7 @@ Folder/Files to be created:
 - models/UserModel.js
 - routes/UserRouter.js
 - index.js
+- .env
 
 ## index.js
 
