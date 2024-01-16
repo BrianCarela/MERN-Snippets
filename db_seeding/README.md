@@ -14,7 +14,7 @@
 
 ## Database backups
 
-Throughout this course, we have been testing our databases by occasionally uploading starter data before making a request to GET this data from the database. As you develop applications that get larger and have collections of data connect/be related to each other, you may need to drop the database and start over, but you want to keep a copy of it. This is either because the data is useful to have during the testing/development phase, or because there are already clients/users on your app, and want to keep their data safe. This is the perfect use case for exporting a copy of your database from Compass, and then importing it to fill up your database again.
+Throughout this course, we have been testing our databases by occasionally uploading starter data before making a request to GET this data from the database. As you develop applications that get larger and have collections of data connect, or are related to each other, you may need to drop the database and start over, but you want to keep a copy of it. This is either because the data is useful to have during the testing/development phase, or because there are already clients/users on your app, and want to keep their data safe. This is the perfect use case for exporting a copy of your database from Compass, and then importing it to fill up your database again.
 
 ## How to export
 
