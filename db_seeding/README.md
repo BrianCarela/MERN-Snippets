@@ -56,7 +56,7 @@ Remember to add this to your javascript snippets:
 			"async function plantTheData(req, res) {",
 			"    try {",
 			"        // Get the Mongoose model for the specified collection",
-			"const CollectionModel = mongoose.model(req.params.collectionName);",
+			"        const CollectionModel = mongoose.model(req.params.collectionName);",
 			"",
 			"        // Collect the appropriate file",
 			"        const jsonFile = require('../models/'+req.params.collectionName+'Seed.json') ",
