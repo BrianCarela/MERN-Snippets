@@ -93,7 +93,6 @@ Here is each snippet you will need, these will go inside your `javascript.json` 
 		"body": [
 			"const express = require('express');",
 			"const app = express();",
-			"const path = require('path');",
 			"const logger = require('morgan')",
 			"const connectToMongoDB = require('./db/mongodb');",
 			"require('dotenv').config();"
@@ -146,10 +145,10 @@ CAPITALIZE THE FIRST LETTER OF THE COLLECTION NAME TO KEEP CONSISTENCY ACROSS FI
 "MERN-index-power": {
         "prefix": "server-pow",
         "body": [
-            "const PORT = 3001",
+            "const PORT = process.env.PORT",
             "",
             "app.listen(PORT, () => {",
-			"    console.log(`server listening on port 3001`);",
+			"    console.log(`server listening on port $${PORT}`);",
 			"",
 			"    connectToMongoDB();",
 			"});"
@@ -158,7 +157,7 @@ CAPITALIZE THE FIRST LETTER OF THE COLLECTION NAME TO KEEP CONSISTENCY ACROSS FI
     }
 ```
 
-Nothing too special to note here
+Note that the variable `PORT` is coming from the `.env` file. Make sure to place `PORT=3001` on that file while you're working locally
 
 ## db/mongodb.js
 
