@@ -36,10 +36,10 @@
 	"MERN-index-power": {
         "prefix": "server-pow",
         "body": [
-            "const PORT = 3001",
+            "const PORT = process.env.PORT",
             "",
             "app.listen(PORT, () => {",
-			"    console.log(`server listening on port 3001`);",
+			"    console.log(`server listening on port $${PORT}`);",
 			"",
 			"    connectToMongoDB();",
 			"});"
