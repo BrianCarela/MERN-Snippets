@@ -358,7 +358,7 @@ Where you see `${2:params}` is where you should use VSCode's "Find and Replace" 
 			"        // dynamic update, merge existing and new values",
 			"        let updated${1:collectionName} = {",
 			"            ...target${1:collectionName}.toObject()",
-			"            ...req.body"
+			"            ...req.body",
 			"        }",
 			"",
 			"        await ${1:collectionName}.updateOne(",
