@@ -355,9 +355,10 @@ Where you see `${2:params}` is where you should use VSCode's "Find and Replace" 
 			"    try {",
 			"        let target${1:collectionName} = await ${1:collectionName}.findOne({ ${2:propertyName}: req.params.${2:propertyName} })",
 			"",
-			"        // ternaries avoid inputting undefined values",
+			"        // dynamic update, merge existing and new values",
 			"        let updated${1:collectionName} = {",
-			"            ${2:propertyName}: req.body.${2:propertyName} ? req.body.${2:propertyName} : target${1:collectionName}.${2:propertyName},",
+			"            ...target${1:collectionName}.toObject()",
+			"            ...req.body"
 			"        }",
 			"",
 			"        await ${1:collectionName}.updateOne(",
