@@ -72,6 +72,18 @@ Once your dependencies are installed, make sure you have the following folders /
 - Each item within the body is a line of code that you want to auto-generate
 - The description is just a full description of what the snippet is.
 
+## Generate a snippet from a file
+
+Creating the `body` property of a snippet can be time consuming, because you have to go line-by-line and write it all out. Here is a shortcut way of doing it:
+
+
+1. Open the file you wish to turn into a snippet. Take a look at any variable names that would be modified upon each use of a snippet, and use `${1:replaceMe}` in place of anything needing to be modified
+2. Open `snippetify.js` and modify line 4 to target the file you're trying to turn into a snippet
+3. The results will be on a file called `snippet.js`. Select all and copy the entire thing
+4. Within `"body": []` paste it
+
+This should shorten the time it takes to create a new snippet out of a template! 
+
 ## How to use a snippet
 
 1. Begin typing the prefix until you see it highlighted on the drop-down menu that appears.
@@ -93,6 +105,7 @@ Here is each snippet you will need, these will go inside your `javascript.json` 
 		"body": [
 			"const express = require('express');",
 			"const app = express();",
+			"const path = require('path');",
 			"const logger = require('morgan')",
 			"const connectToMongoDB = require('./db/mongodb');",
 			"require('dotenv').config();"
@@ -128,7 +141,7 @@ Basic middleware. When testing fullstack, make sure to include any code that res
         "prefix": "server-routes",
         "body": [
             "const ${1:collectionName}Router = require('./routes/${1:collectionName}Router');",
-			"// localhost:3001/...",
+			"// localhost:3001/${1:collectionName}/...",
 			"app.use('/${1:collectionName}', ${1:collectionName}Router);"
         ],
         "description": "insert-description-here"
@@ -145,10 +158,10 @@ CAPITALIZE THE FIRST LETTER OF THE COLLECTION NAME TO KEEP CONSISTENCY ACROSS FI
 "MERN-index-power": {
         "prefix": "server-pow",
         "body": [
-            "const PORT = process.env.PORT",
+            "const PORT = 3001",
             "",
             "app.listen(PORT, () => {",
-			"    console.log(`server listening on port $${PORT}`);",
+			"    console.log(`server listening on port 3001`);",
 			"",
 			"    connectToMongoDB();",
 			"});"
@@ -157,7 +170,7 @@ CAPITALIZE THE FIRST LETTER OF THE COLLECTION NAME TO KEEP CONSISTENCY ACROSS FI
     }
 ```
 
-Note that the variable `PORT` is coming from the `.env` file. Make sure to place `PORT=3001` on that file while you're working locally
+Nothing too special to note here
 
 ## db/mongodb.js
 
@@ -186,7 +199,7 @@ Note that the variable `PORT` is coming from the `.env` file. Make sure to place
 
 Nothing to note here, no changes ever need to be made to this file. Just make sure that your `.env` file is in place to be connected
 
-## models/ExmapleModel.js
+## models/ExampleModel.js
 
 ```js
 "MERN-model-schema": {
@@ -225,15 +238,15 @@ Where you see `${2:property}` is where you should begin specifying the propertie
             "const router = require('express').Router();",
 			"",
 			"const {",
-			"    getAll${1:model},",
+			"    getAll${1:model}s,",
 			"    getOne${1:model},",
 			"    createOne${1:model},",
 			"    deleteOne${1:model},",
 			"    updateOne${1:model}",
 			"} = require('../controllers/${1:model}Controller');",
 			"",
-			"// localhost:3001/${1:model}/all${1:model}",
-			"router.get('/all${1:model}', getAll${1:model});",
+			"// localhost:3001/${1:model}/all${1:model}s",
+			"router.get('/all${1:model}s', getAll${1:model}s);",
 			"",
 			"// localhost:3001/${1:model}/one${1:model}/:${2:params}",
 			"router.get('/one${1:model}/:${2:params}', getOne${1:model});",
@@ -253,9 +266,9 @@ Where you see `${2:property}` is where you should begin specifying the propertie
     }
 ```
 
-Everywhere you see `${1:model}` will automatically be highlighted, so when you hit the `tab` key you can immediately begin typing the name of the data collection that these routes are referring to.
+Everywhere you see `${1:model}` will automatically be highlighted, so you can immediately begin typing the name of the data collection that these routes are referring to.
 
-Where you see `${2:params}` is where you should use VSCode's "Find and Replace" function to replace this with the property you are using to identify specific documents in your data collection
+Where you see `${2:params}` is where you can hit tab to replace this with the property you are using to identify specific documents in your data collection
 
 ## controlers/ExampleController.js
 
@@ -265,7 +278,7 @@ Where you see `${2:params}` is where you should use VSCode's "Find and Replace" 
         "body": [
             "const ${1:collectionName} = require('../models/${1:collectionName}Model');",
 			"",
-			"async function getAll${1:collectionName} (req, res) {",
+			"async function getAll${1:collectionName}s (req, res) {",
 			"    try {",
 			"        let results = await ${1:collectionName}.find({});",
 			"",
@@ -308,9 +321,9 @@ Where you see `${2:params}` is where you should use VSCode's "Find and Replace" 
 			"async function createOne${1:collectionName}(req, res){",
 			"    try {",
 			"        // Accepting the front-end form data from the client to generate the document",
-			"        let new${1:collectionName} = {",
-			"            ${2:propertyName}: req.body.${2:propertyName},",
-			"        }",
+			"        let new${1:collectionName} = req.body",
+			"",
+			"",
 			"",
 			"        // post the new document to the ${1:collectionName} collection",
 			"        await ${1:collectionName}.create(new${1:collectionName});",
@@ -355,10 +368,9 @@ Where you see `${2:params}` is where you should use VSCode's "Find and Replace" 
 			"    try {",
 			"        let target${1:collectionName} = await ${1:collectionName}.findOne({ ${2:propertyName}: req.params.${2:propertyName} })",
 			"",
-			"        // dynamic update, merge existing and new values",
+			"        // ternaries avoid inputting undefined values",
 			"        let updated${1:collectionName} = {",
-			"            ...target${1:collectionName}.toObject()",
-			"            ...req.body",
+			"            ${2:propertyName}: req.body.${2:propertyName} ? req.body.${2:propertyName} : target${1:collectionName}.${2:propertyName},",
 			"        }",
 			"",
 			"        await ${1:collectionName}.updateOne(",
@@ -384,7 +396,7 @@ Where you see `${2:params}` is where you should use VSCode's "Find and Replace" 
 			"}",
 			"",
 			"module.exports = {",
-			"    getAll${1:collectionName},",
+			"    getAll${1:collectionName}s,",
 			"    getOne${1:collectionName},",
 			"    createOne${1:collectionName}, ",
 			"    deleteOne${1:collectionName},",
@@ -398,3 +410,195 @@ Where you see `${2:params}` is where you should use VSCode's "Find and Replace" 
 Everywhere you see `${1:collectionName}` will automatically be highlighted, so when you hit the `tab` key you can immediately begin typing the name of the data collection that these functions are referring to.
 
 Where you see `${2:propertyName}` is where you should use VSCode's "Find and Replace" function to replace this with the property you are using to identify specific documents in your data collection
+
+## controllers/userController.js
+
+```js
+"Argon2-controller": {
+        "prefix": "argon2-controls",
+        "body": [
+            "const User = require('../models/userModel')",
+            "const argon2 = require('argon2')",
+            "",
+			"async function createUser(req, res) {",
+			"    try {",
+			"        // temporarily hold password",
+			"        let userPassword = req.body.password",
+			"",
+			"        // encrypt password",
+			"        const sentPassword = await argon2.hash(userPassword)",
+			"",
+			"        // generate new user document",
+			"        let newUser = {",
+			"            username: req.body.username,",
+			"            password: sentPassword",
+			"        }",
+			"",
+			"        // insert document into the database",
+			"        await User.create(newUser)",
+			"",
+			"        res.json({",
+			"            message: 'success',",
+			"            payload: newUser",
+			"        })",
+			"    } catch (error) {",
+			"        let errorObj = {",
+			"            message: 'create user failure',",
+			"            payload: error",
+			"        }",
+			"",
+			"        res.json(errorObj)",
+			"        console.log(errorObj)",
+			"    }",
+			"}",
+			"",
+			"async function verifyPassword(req, res) {",
+			"    try {",
+			"        // hold username & password individually",
+			"        let incomingUsername = req.body.username",
+			"        let incomingPassword = req.body.password",
+			"",
+			"        // find the target user",
+			"        let foundUser = await User.findOne({ username: incomingUsername })",
+			"",
+			"        // compare passwords",
+			"        const isCorrectPassword = await argon2.verify(foundUser.password, incomingPassword)",
+			"",
+			"        // respond based on password correctness",
+			"        if (isCorrectPassword) {",
+			"            res.json({",
+			"                message: 'verify password success',",
+			"                payload: 'logged in!'",
+			"            })",
+			"        } else {",
+			"            res.json({",
+			"                message: 'verify password success',",
+			"                payload: 'Please check your password and try again'",
+			"            })",
+			"        }",
+			"    } catch (error) {",
+			"        let errorObj = {",
+			"            message: 'verify password failure',",
+			"            payload: error",
+			"        }",
+			"",
+			"        res.json(errorObj)",
+			"        console.log(errorObj)",
+			"    }",
+			"}",
+			"",
+			"async function updatePassword(req, res) {",
+			"    try {",
+			"        // capture all necessary info",
+			"        const { username, oldPassword, newPassword } = req.body",
+			"",
+			"        // Target the correct user",
+			"        let foundUser = await User.findOne({ username: username })",
+			"",
+			"        // Verify the original password is correct",
+			"        let isCorrectPassword = await argon2.verify(foundUser.password, oldPassword)",
+			"",
+			"        // Double check that the new password isn't the same as the old one",
+			"        let isSamePassword = await argon2.verify(foundUser.password, newPassword)",
+			"",
+			"        // respond accordingly",
+			"        if (isCorrectPassword && !isSamePassword) {",
+			"            const newSafePassword = await argon2.hash(newPassword)",
+			"",
+			"            foundUser.password = newSafePassword",
+			"",
+			"            await foundUser.save()",
+			"            res.json({",
+			"                message: 'update password success',",
+			"                payload: 'Your password has been updated!'",
+			"            })",
+			"        } else if (isSamePassword) {",
+			"            res.json({",
+			"                message: 'update password success',",
+			"                payload: 'New password must be different from the old password'",
+			"            })",
+			"        } else {",
+			"            res.json({",
+			"                message: 'update password success',",
+			"                payload: 'Original password is incorrect, please check the spelling and try again'",
+			"            })",
+			"        }",
+			"    } catch (error) {",
+			"        let errorObj = {",
+			"            message: 'update password failure',",
+			"            payload: error",
+			"        }",
+			"",
+			"        res.json(errorObj)",
+			"        console.log(errorObj)",
+			"    }",
+			"}",
+			"",
+			"module.exports = {",
+			"    createUser,",
+			"    verifyPassword,",
+			"    updatePassword",
+			"}"
+        ],
+        "description": "password encryption controller. verifyPassword() can be used as part of a login process, make sure to coordinate properly with whatever login method you're using"
+    },
+```
+
+## models/userModel.js
+
+```js
+"User-model": {
+        "prefix": "user-model",
+        "body": [
+            "const mongoose = require('mongoose')",
+            "",
+            "const userSchema = new mongoose.Schema(",
+			"    {",
+			"        username: {",
+			"            type: String,",
+			"            required: true,",
+			"            unique: true",
+			"        },",
+			"        password: {",
+			"            type: String,",
+			"            required: true",
+			"        }",
+			"    }",
+			")",
+			"",
+			"const User = mongoose.model('User', userSchema)",
+			"",
+			"module.exports = User"
+        ],
+        "description": "User model with mongoose, can coordinate with argon2/bcrypt for password encryption"
+    },
+```
+
+## routes/userRouter.js
+
+```js
+"User-router": {
+        "prefix": "user-router",
+        "body": [
+            "const router = require('express').Router()",
+            "",
+            "const {",
+			"    createUser,",
+			"    verifyPassword,",
+			"    updatePassword",
+			"} = require('../controllers/userController')",
+			"",
+			"// localhost:3001/api/createUser",
+			"router.post('/createUser', createUser)",
+			"",
+			"// localhost:3001/api/verifyPassword",
+			"router.post('/verifyPassword', verifyPassword)",
+			"",
+			"// localhost:3001/api/updatePassword",
+			"router.put('/updatePassword', updatePassword)",
+			"",
+			"module.exports = router"
+        ],
+        "description": "This connects with the user-controller snippet"
+    }
+```
